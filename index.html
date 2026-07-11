@@ -953,8 +953,8 @@ function speakCurrentWord(rate = 0.78, activeButton = $("soundBtn")){
   }
 
   /* 日本語音声 */
-  const japanese =
-    new SpeechSynthesisUtterance(current.jp);
+ const japanese =
+  new SpeechSynthesisUtterance(current.speak || current.jp);
 
   japanese.lang = "ja-JP";
   japanese.rate = 0.9;
