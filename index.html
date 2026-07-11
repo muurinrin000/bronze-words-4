@@ -917,7 +917,7 @@ function getEnglishVoice(){
   );
 }
 
-/* 現在の英単語を読み上げる */
+/* 現在の英単語を英語→日本語の順で読み上げる */
 function speakCurrentWord(rate = 0.78, activeButton = $("soundBtn")){
   if(!("speechSynthesis" in window)){
     alert(
@@ -937,35 +937,55 @@ function speakCurrentWord(rate = 0.78, activeButton = $("soundBtn")){
   $("soundBtn").classList.remove("speaking");
   $("slowBtn").classList.remove("speaking");
 
-  const utterance =
+  /* 英語音声 */
+  const english =
     new SpeechSynthesisUtterance(current.en);
 
-  utterance.lang = "en-US";
-  utterance.rate = rate;
-  utterance.pitch = 1.0;
-  utterance.volume = 1;
+  english.lang = "en-US";
+  english.rate = rate;
+  english.pitch = 1.0;
+  english.volume = 1;
 
-  const voice = getEnglishVoice();
+  const englishVoice = getEnglishVoice();
 
-  if(voice){
-    utterance.voice = voice;
+  if(englishVoice){
+    english.voice = englishVoice;
   }
 
-  utterance.onstart = () => {
+  /* 日本語音声 */
+  const japanese =
+    new SpeechSynthesisUtterance(current.jp);
+
+  japanese.lang = "ja-JP";
+  japanese.rate = 0.9;
+  japanese.pitch = 1.0;
+  japanese.volume = 1;
+
+  english.onstart = () => {
     activeButton.classList.add("speaking");
   };
 
-  utterance.onend = () => {
+  /* 英語が終わった0.3秒後に日本語を再生 */
+  english.onend = () => {
+    setTimeout(() => {
+      speechSynthesis.speak(japanese);
+    }, 300);
+  };
+
+  japanese.onend = () => {
     activeButton.classList.remove("speaking");
   };
 
-  utterance.onerror = () => {
+  english.onerror = () => {
     activeButton.classList.remove("speaking");
   };
 
-  speechSynthesis.speak(utterance);
+  japanese.onerror = () => {
+    activeButton.classList.remove("speaking");
+  };
+
+  speechSynthesis.speak(english);
 }
-
 /* ふつうの速さ */
 function speakNormal(){
   speakCurrentWord(0.78, $("soundBtn"));
