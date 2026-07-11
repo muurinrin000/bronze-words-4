@@ -2,10 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+
 <meta
   name="viewport"
   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 >
+
 <title>場所の英単語をおぼえよう</title>
 
 <style>
@@ -26,14 +28,20 @@
 }
 
 html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  overscroll-behavior:none;
+}
+
+html,
 body,
 button{
   touch-action:manipulation;
 }
 
 body{
-  margin:0;
-  min-height:100vh;
   background:linear-gradient(180deg,var(--bg1),var(--bg2));
   color:var(--text);
   font-family:
@@ -44,127 +52,154 @@ body{
     sans-serif;
 }
 
+/* 全体を画面内に収める */
 .app{
-  position:relative;
+  width:100%;
   max-width:520px;
+  min-height:100vh;
+  min-height:100dvh;
   margin:0 auto;
-  padding:16px;
+  padding:
+    max(8px, env(safe-area-inset-top))
+    12px
+    max(8px, env(safe-area-inset-bottom));
+
+  display:flex;
+  flex-direction:column;
 }
 
+/* ヘッダー */
 .header{
   position:relative;
+  flex-shrink:0;
   text-align:center;
-  padding:8px 48px 14px;
+  padding:2px 44px 6px;
 }
 
 .settings-open{
   position:absolute;
-  top:2px;
+  top:0;
   right:0;
-  width:44px;
-  height:44px;
+
+  width:42px;
+  height:42px;
+
   border:0;
   border-radius:50%;
   background:#edf6f9;
-  font-size:22px;
+
+  font-size:21px;
   cursor:pointer;
 }
 
 .badge{
   display:inline-block;
+  padding:5px 12px;
+
   background:var(--main);
   border-radius:999px;
-  padding:7px 14px;
-  font-size:13px;
+
+  font-size:12px;
   font-weight:900;
 }
 
 h1{
-  margin:10px 0 5px;
-  font-size:26px;
+  margin:5px 0 2px;
+  font-size:21px;
+  line-height:1.25;
 }
 
 .lead{
   margin:0;
   color:var(--muted);
-  font-size:14px;
+  font-size:12px;
 }
 
+/* 問題数 */
 .progress-area{
-  margin-bottom:12px;
-}
-
-.progress-text{
+  flex-shrink:0;
   display:flex;
   justify-content:space-between;
-  margin-bottom:7px;
+  align-items:center;
+
+  padding:5px 4px 7px;
+
+  font-size:16px;
   font-weight:900;
 }
 
-.progress-bar{
-  height:12px;
-  overflow:hidden;
-  background:#fff;
-  border:2px solid var(--line);
-  border-radius:999px;
+.mode-label{
+  font-size:14px;
 }
 
-.progress-fill{
-  width:0%;
-  height:100%;
-  background:var(--main);
-  border-radius:999px;
-  transition:width .25s;
-}
-
+/* 単語カード */
 .card{
-  min-height:430px;
-  padding:24px 18px;
+  flex:1;
+  min-height:0;
+
+  padding:12px 14px;
+
   background:var(--card);
   border:4px solid var(--main);
-  border-radius:30px;
-  box-shadow:0 8px 24px rgba(0,0,0,.09);
+  border-radius:26px;
+  box-shadow:0 7px 20px rgba(0,0,0,.08);
 
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+
+  overflow:hidden;
 }
 
 .icon{
-  font-size:120px;
-  line-height:1.1;
-  margin-bottom:20px;
+  margin-bottom:6px;
+
+  font-size:88px;
+  line-height:1;
+
   user-select:none;
   cursor:pointer;
 }
 
 .english{
-  font-size:38px;
-  line-height:1.2;
+  font-size:31px;
+  line-height:1.15;
   font-weight:900;
   color:#156082;
+
+  text-align:center;
   overflow-wrap:anywhere;
   cursor:pointer;
 }
 
 .japanese{
-  margin-top:12px;
-  font-size:28px;
+  margin-top:4px;
+
+  font-size:23px;
+  line-height:1.2;
   font-weight:900;
+
+  text-align:center;
 }
 
 .sound-btn{
   width:100%;
-  max-width:330px;
-  min-height:70px;
-  margin-top:28px;
+  max-width:340px;
+  min-height:54px;
+
+  margin-top:12px;
+  padding:8px 12px;
+
   border:0;
-  border-radius:24px;
+  border-radius:20px;
+
   background:var(--sky);
   color:var(--text);
-  font-size:22px;
+
+  font-size:19px;
   font-weight:900;
+
   box-shadow:0 5px 0 #5f9fbd;
   cursor:pointer;
 }
@@ -175,28 +210,36 @@ h1{
 }
 
 .sound-btn.speaking{
-  animation:pulse .7s infinite alternate;
+  animation:pulse .65s infinite alternate;
 }
 
+/* 前へ・次へ */
 .navigation{
+  flex-shrink:0;
+
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
+  gap:8px;
+
+  margin-top:8px;
 }
 
 .nav-btn{
-  min-height:58px;
+  min-height:50px;
+  padding:8px;
+
   border:0;
-  border-radius:20px;
-  font-size:18px;
+  border-radius:18px;
+
+  font-size:17px;
   font-weight:900;
-  color:var(--text);
+
   cursor:pointer;
 }
 
 .prev-btn{
   background:#edf6f9;
+  color:var(--text);
 }
 
 .next-btn{
@@ -208,28 +251,26 @@ h1{
   transform:scale(.98);
 }
 
+/* シャッフル */
 .shuffle-btn{
-  width:100%;
-  min-height:50px;
-  margin-top:12px;
-  border:0;
-  border-radius:18px;
-  background:#fff;
-  color:var(--muted);
-  font-size:16px;
-  font-weight:900;
-  cursor:pointer;
-}
+  flex-shrink:0;
 
-.help{
-  margin:18px 4px 0;
-  padding:14px;
-  background:rgba(255,255,255,.72);
-  border-radius:18px;
+  width:100%;
+  min-height:40px;
+
+  margin-top:7px;
+  padding:7px;
+
+  border:0;
+  border-radius:15px;
+
+  background:rgba(255,255,255,.85);
   color:var(--muted);
+
   font-size:14px;
-  line-height:1.7;
-  text-align:center;
+  font-weight:900;
+
+  cursor:pointer;
 }
 
 /* 設定画面の背景 */
@@ -238,24 +279,34 @@ h1{
   position:fixed;
   inset:0;
   z-index:998;
-  background:rgba(38,48,68,.35);
+
+  background:rgba(38,48,68,.38);
 }
 
 .settings-overlay.active{
   display:block;
 }
 
-/* 保護者向け設定 */
+/* 保護者設定 */
 .settings-sheet{
   display:none;
+
   position:fixed;
   left:0;
   right:0;
   bottom:0;
   z-index:999;
-  max-height:85vh;
+
+  max-height:86vh;
+  max-height:86dvh;
+
+  padding:
+    18px
+    16px
+    max(18px, env(safe-area-inset-bottom));
+
   overflow-y:auto;
-  padding:20px;
+
   background:#fff;
   border-radius:28px 28px 0 0;
   box-shadow:0 -8px 30px rgba(0,0,0,.2);
@@ -266,10 +317,18 @@ h1{
 }
 
 .settings-head{
+  position:sticky;
+  top:-18px;
+  z-index:2;
+
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:16px;
+
+  margin:-2px 0 14px;
+  padding:4px 0 8px;
+
+  background:#fff;
 }
 
 .settings-head h2{
@@ -280,143 +339,255 @@ h1{
 .settings-close{
   width:40px;
   height:40px;
+
   border:0;
   border-radius:50%;
+
   background:#edf6f9;
-  font-size:24px;
+
+  font-size:23px;
   font-weight:900;
+
   cursor:pointer;
 }
 
 .settings-description{
   margin:0 0 12px;
+
   color:var(--muted);
   font-size:14px;
-  line-height:1.6;
+  line-height:1.55;
 }
 
 .setting-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-bottom:14px;
+
+  margin-bottom:12px;
 }
 
 .setting-actions button{
-  min-height:46px;
+  min-height:44px;
+
   border:0;
-  border-radius:16px;
-  background:#edf6f9;
+  border-radius:15px;
+
+  background:#ffbf32;
   color:var(--text);
+
   font-size:15px;
   font-weight:900;
+
   cursor:pointer;
 }
 
 .word-checks{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:8px;
 }
 
 .word-check{
   display:flex;
   align-items:flex-start;
   gap:7px;
-  min-height:60px;
-  padding:10px;
+
+  min-height:58px;
+  padding:9px;
+
   background:#fff8df;
   border:2px solid #f3d28a;
-  border-radius:16px;
-  font-size:14px;
+  border-radius:15px;
+
+  font-size:13px;
   font-weight:900;
+
   cursor:pointer;
 }
 
 .word-check input{
   width:20px;
   height:20px;
+
+  margin:0;
   flex-shrink:0;
+}
+
+.word-check span{
+  line-height:1.35;
+  overflow-wrap:anywhere;
 }
 
 .setting-option{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-top:18px;
-  padding:14px;
+
+  margin-top:14px;
+  padding:12px;
+
   background:#edf6f9;
-  border-radius:16px;
+  border-radius:15px;
+
+  font-size:14px;
   font-weight:900;
+
   cursor:pointer;
 }
 
 .setting-option input{
-  width:22px;
-  height:22px;
+  width:21px;
+  height:21px;
+  flex-shrink:0;
 }
 
 .save-settings{
   width:100%;
-  min-height:56px;
-  margin-top:18px;
+  min-height:53px;
+
+  margin-top:15px;
+
   border:0;
   border-radius:18px;
+
   background:var(--main);
   color:var(--text);
-  font-size:18px;
+
+  font-size:17px;
   font-weight:900;
+
   cursor:pointer;
 }
 
 .settings-error{
-  min-height:22px;
-  margin-top:10px;
+  min-height:20px;
+  margin-top:8px;
+
   color:#e76f51;
   font-size:14px;
   font-weight:900;
+
   text-align:center;
 }
 
+/* アニメーション */
 @keyframes pulse{
   from{
     transform:scale(1);
   }
+
   to{
-    transform:scale(1.04);
+    transform:scale(1.035);
   }
 }
 
 .card-change{
-  animation:cardChange .25s;
+  animation:cardChange .22s;
 }
 
 @keyframes cardChange{
   from{
-    opacity:.25;
-    transform:translateX(16px);
+    opacity:.3;
+    transform:translateX(12px);
   }
+
   to{
     opacity:1;
     transform:translateX(0);
   }
 }
 
-@media (max-width:380px){
+/* 画面が低い端末向け */
+@media (max-height:740px){
+  .app{
+    padding-top:5px;
+    padding-bottom:5px;
+  }
+
+  .header{
+    padding-bottom:3px;
+  }
+
+  .badge{
+    padding:4px 10px;
+    font-size:11px;
+  }
+
+  h1{
+    margin:3px 0 1px;
+    font-size:19px;
+  }
+
+  .lead{
+    font-size:11px;
+  }
+
+  .progress-area{
+    padding:3px 4px 5px;
+    font-size:15px;
+  }
+
   .card{
-    min-height:390px;
+    padding:8px 12px;
+    border-radius:23px;
   }
 
   .icon{
-    font-size:100px;
+    margin-bottom:3px;
+    font-size:74px;
   }
 
   .english{
-    font-size:32px;
+    font-size:27px;
   }
 
   .japanese{
-    font-size:25px;
+    font-size:20px;
+  }
+
+  .sound-btn{
+    min-height:48px;
+    margin-top:8px;
+    font-size:17px;
+  }
+
+  .navigation{
+    margin-top:6px;
+  }
+
+  .nav-btn{
+    min-height:44px;
+    font-size:16px;
+  }
+
+  .shuffle-btn{
+    min-height:36px;
+    margin-top:5px;
+  }
+}
+
+/* 横幅の狭い端末向け */
+@media (max-width:380px){
+  .header{
+    padding-left:40px;
+    padding-right:40px;
+  }
+
+  h1{
+    font-size:19px;
+  }
+
+  .icon{
+    font-size:78px;
+  }
+
+  .english{
+    font-size:28px;
+  }
+
+  .japanese{
+    font-size:21px;
   }
 
   .word-checks{
@@ -427,9 +598,11 @@ h1{
 </head>
 
 <body>
+
 <div class="app">
 
   <header class="header">
+
     <button
       id="settingsOpen"
       class="settings-open"
@@ -440,61 +613,99 @@ h1{
     </button>
 
     <span class="badge">英検Jr.向け</span>
+
     <h1>🏙️ 場所の英単語をおぼえよう</h1>
-    <p class="lead">絵と音を見ながら、ゆっくり覚えよう</p>
+
+    <p class="lead">
+      絵と音を見ながら、ゆっくり覚えよう
+    </p>
+
   </header>
 
   <div class="progress-area">
-    <div class="progress-text">
-      <span id="counter">1 / 1</span>
-      <span>⭐ おぼえるモード</span>
-    </div>
 
-    <div class="progress-bar">
-      <div id="progressFill" class="progress-fill"></div>
-    </div>
+    <span id="counter">
+      1 / 24
+    </span>
+
+    <span class="mode-label">
+      ⭐ おぼえるモード
+    </span>
+
   </div>
 
   <main id="card" class="card">
-    <div id="icon" class="icon">🍽️</div>
-    <div id="english" class="english">restaurant</div>
-    <div id="japanese" class="japanese">レストラン</div>
 
-    <button id="soundBtn" class="sound-btn" type="button">
+    <div id="icon" class="icon">
+      🍽️
+    </div>
+
+    <div id="english" class="english">
+      restaurant
+    </div>
+
+    <div id="japanese" class="japanese">
+      レストラン
+    </div>
+
+    <button
+      id="soundBtn"
+      class="sound-btn"
+      type="button"
+    >
       🔊 restaurant
     </button>
+
   </main>
 
   <div class="navigation">
-    <button id="prevBtn" class="nav-btn prev-btn" type="button">
+
+    <button
+      id="prevBtn"
+      class="nav-btn prev-btn"
+      type="button"
+    >
       ◀ まえ
     </button>
 
-    <button id="nextBtn" class="nav-btn next-btn" type="button">
+    <button
+      id="nextBtn"
+      class="nav-btn next-btn"
+      type="button"
+    >
       つぎ ▶
     </button>
+
   </div>
 
-  <button id="shuffleBtn" class="shuffle-btn" type="button">
+  <button
+    id="shuffleBtn"
+    class="shuffle-btn"
+    type="button"
+  >
     🔀 順番をまぜる
   </button>
 
-  <div class="help">
-    イラストや「🔊」ボタンを押すと、英語をもう一度聞けます。<br>
-    間違いも点数もないので、見るだけでも大丈夫です。
-  </div>
-
 </div>
 
-<div id="settingsOverlay" class="settings-overlay"></div>
+<!-- 設定画面の背景 -->
+<div
+  id="settingsOverlay"
+  class="settings-overlay"
+></div>
 
+<!-- 保護者向け設定 -->
 <section
   id="settingsSheet"
   class="settings-sheet"
   aria-label="保護者向け設定"
 >
+
   <div class="settings-head">
-    <h2>⚙️ 保護者向け設定</h2>
+
+    <h2>
+      ⚙️ 保護者向け設定
+    </h2>
 
     <button
       id="settingsClose"
@@ -504,35 +715,62 @@ h1{
     >
       ×
     </button>
+
   </div>
 
   <p class="settings-description">
     お子さまに覚えてほしい単語を選んでください。
-    設定はこのブラウザに保存されます。
+    設定内容は、このブラウザに保存されます。
   </p>
 
   <div class="setting-actions">
-    <button id="selectAllBtn" type="button">
+
+    <button
+      id="selectAllBtn"
+      type="button"
+    >
       すべて選択
     </button>
 
-    <button id="clearAllBtn" type="button">
+    <button
+      id="clearAllBtn"
+      type="button"
+    >
       すべて外す
     </button>
+
   </div>
 
-  <div id="wordChecks" class="word-checks"></div>
+  <div
+    id="wordChecks"
+    class="word-checks"
+  ></div>
 
   <label class="setting-option">
-    <input id="autoSpeakCheck" type="checkbox" checked>
+
+    <input
+      id="autoSpeakCheck"
+      type="checkbox"
+      checked
+    >
+
     「つぎ」へ進んだら英語を自動再生する
+
   </label>
 
-  <button id="saveSettingsBtn" class="save-settings" type="button">
+  <button
+    id="saveSettingsBtn"
+    class="save-settings"
+    type="button"
+  >
     保存してはじめる
   </button>
 
-  <div id="settingsError" class="settings-error"></div>
+  <div
+    id="settingsError"
+    class="settings-error"
+  ></div>
+
 </section>
 
 <script>
@@ -571,11 +809,13 @@ let autoSpeak = true;
 
 const $ = id => document.getElementById(id);
 
+/* 配列をシャッフル */
 function shuffle(array){
   const copied = array.slice();
 
   for(let i = copied.length - 1; i > 0; i--){
-    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const randomIndex =
+      Math.floor(Math.random() * (i + 1));
 
     [copied[i], copied[randomIndex]] =
       [copied[randomIndex], copied[i]];
@@ -584,6 +824,7 @@ function shuffle(array){
   return copied;
 }
 
+/* カードを表示 */
 function renderCard(){
   if(words.length === 0){
     return;
@@ -603,17 +844,17 @@ function renderCard(){
   $("counter").textContent =
     (currentIndex + 1) + " / " + words.length;
 
-  $("progressFill").style.width =
-    ((currentIndex + 1) / words.length * 100) + "%";
-
   $("prevBtn").disabled = currentIndex === 0;
+
   $("prevBtn").style.opacity =
     currentIndex === 0 ? ".45" : "1";
 
   if(currentIndex === words.length - 1){
-    $("nextBtn").textContent = "最初にもどる ↻";
+    $("nextBtn").textContent =
+      "最初にもどる ↻";
   }else{
-    $("nextBtn").textContent = "つぎ ▶";
+    $("nextBtn").textContent =
+      "つぎ ▶";
   }
 
   $("card").classList.remove("card-change");
@@ -623,20 +864,32 @@ function renderCard(){
   });
 }
 
+/* 英語音声を選択 */
 function getEnglishVoice(){
   const voices = speechSynthesis.getVoices();
 
   return (
-    voices.find(voice => voice.name.includes("Samantha")) ||
-    voices.find(voice => voice.name.includes("Karen")) ||
-    voices.find(voice => voice.lang === "en-US") ||
-    voices.find(voice => voice.lang.startsWith("en"))
+    voices.find(voice =>
+      voice.name.includes("Samantha")
+    ) ||
+    voices.find(voice =>
+      voice.name.includes("Karen")
+    ) ||
+    voices.find(voice =>
+      voice.lang === "en-US"
+    ) ||
+    voices.find(voice =>
+      voice.lang.startsWith("en")
+    )
   );
 }
 
+/* 現在の英単語を読み上げる */
 function speakCurrentWord(){
   if(!("speechSynthesis" in window)){
-    alert("このブラウザは音声読み上げに対応していません。");
+    alert(
+      "このブラウザは音声読み上げに対応していません。"
+    );
     return;
   }
 
@@ -677,6 +930,7 @@ function speakCurrentWord(){
   speechSynthesis.speak(utterance);
 }
 
+/* 自動再生 */
 function speakAfterMove(){
   if(!autoSpeak){
     return;
@@ -684,9 +938,10 @@ function speakAfterMove(){
 
   setTimeout(() => {
     speakCurrentWord();
-  }, 200);
+  }, 180);
 }
 
+/* 次へ */
 function showNext(){
   if(currentIndex < words.length - 1){
     currentIndex++;
@@ -698,53 +953,30 @@ function showNext(){
   speakAfterMove();
 }
 
+/* 前へ */
 function showPrevious(){
   if(currentIndex === 0){
     return;
   }
 
   currentIndex--;
+
   renderCard();
   speakAfterMove();
 }
 
-function buildSettings(){
-  const savedSettings = loadSettings();
-  const selectedIndexes = savedSettings.selectedIndexes;
-
-  $("wordChecks").innerHTML = "";
-
-  originalWords.forEach((word, index) => {
-    const label = document.createElement("label");
-    label.className = "word-check";
-
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "word-checkbox";
-    checkbox.value = String(index);
-    checkbox.checked = selectedIndexes.includes(index);
-
-    const text = document.createElement("span");
-    text.textContent =
-      word.icon + " " + word.jp + " / " + word.en;
-
-    label.appendChild(checkbox);
-    label.appendChild(text);
-
-    $("wordChecks").appendChild(label);
-  });
-
-  $("autoSpeakCheck").checked = savedSettings.autoSpeak;
-}
-
+/* 保存設定を読み込む */
 function loadSettings(){
   const defaultSettings = {
-    selectedIndexes:originalWords.map((_, index) => index),
+    selectedIndexes:
+      originalWords.map((_, index) => index),
+
     autoSpeak:true
   };
 
   try{
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved =
+      localStorage.getItem(STORAGE_KEY);
 
     if(!saved){
       return defaultSettings;
@@ -762,18 +994,69 @@ function loadSettings(){
         : defaultSettings.selectedIndexes;
 
     if(selectedIndexes.length === 0){
-      selectedIndexes = defaultSettings.selectedIndexes;
+      selectedIndexes =
+        defaultSettings.selectedIndexes;
     }
 
     return {
-      selectedIndexes,
+      selectedIndexes:selectedIndexes,
       autoSpeak:parsed.autoSpeak !== false
     };
+
   }catch(error){
+    console.warn(
+      "設定の読み込みに失敗しました。",
+      error
+    );
+
     return defaultSettings;
   }
 }
 
+/* 設定画面のチェックボックスを作る */
+function buildSettings(){
+  const savedSettings = loadSettings();
+  const selectedIndexes =
+    savedSettings.selectedIndexes;
+
+  $("wordChecks").innerHTML = "";
+
+  originalWords.forEach((word, index) => {
+    const label =
+      document.createElement("label");
+
+    label.className = "word-check";
+
+    const checkbox =
+      document.createElement("input");
+
+    checkbox.type = "checkbox";
+    checkbox.className = "word-checkbox";
+    checkbox.value = String(index);
+    checkbox.checked =
+      selectedIndexes.includes(index);
+
+    const text =
+      document.createElement("span");
+
+    text.textContent =
+      word.icon +
+      " " +
+      word.jp +
+      " / " +
+      word.en;
+
+    label.appendChild(checkbox);
+    label.appendChild(text);
+
+    $("wordChecks").appendChild(label);
+  });
+
+  $("autoSpeakCheck").checked =
+    savedSettings.autoSpeak;
+}
+
+/* 保存済みの設定をゲームに反映 */
 function applySavedSettings(){
   const savedSettings = loadSettings();
 
@@ -787,28 +1070,42 @@ function applySavedSettings(){
   renderCard();
 }
 
+/* 設定を開く */
 function openSettings(){
   buildSettings();
 
   $("settingsError").textContent = "";
-  $("settingsSheet").classList.add("active");
-  $("settingsOverlay").classList.add("active");
 
-  speechSynthesis.cancel();
+  $("settingsSheet")
+    .classList.add("active");
+
+  $("settingsOverlay")
+    .classList.add("active");
+
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
 }
 
+/* 設定を閉じる */
 function closeSettings(){
-  $("settingsSheet").classList.remove("active");
-  $("settingsOverlay").classList.remove("active");
+  $("settingsSheet")
+    .classList.remove("active");
+
+  $("settingsOverlay")
+    .classList.remove("active");
 }
 
+/* 音声関連 */
 $("soundBtn").onclick = speakCurrentWord;
 $("icon").onclick = speakCurrentWord;
 $("english").onclick = speakCurrentWord;
 
+/* 移動ボタン */
 $("nextBtn").onclick = showNext;
 $("prevBtn").onclick = showPrevious;
 
+/* シャッフル */
 $("shuffleBtn").onclick = () => {
   words = shuffle(words);
   currentIndex = 0;
@@ -817,10 +1114,12 @@ $("shuffleBtn").onclick = () => {
   speakAfterMove();
 };
 
+/* 設定画面 */
 $("settingsOpen").onclick = openSettings;
 $("settingsClose").onclick = closeSettings;
 $("settingsOverlay").onclick = closeSettings;
 
+/* すべて選択 */
 $("selectAllBtn").onclick = () => {
   document
     .querySelectorAll(".word-checkbox")
@@ -831,6 +1130,7 @@ $("selectAllBtn").onclick = () => {
   $("settingsError").textContent = "";
 };
 
+/* すべて外す */
 $("clearAllBtn").onclick = () => {
   document
     .querySelectorAll(".word-checkbox")
@@ -839,19 +1139,27 @@ $("clearAllBtn").onclick = () => {
     });
 };
 
+/* 設定を保存 */
 $("saveSettingsBtn").onclick = () => {
   const selectedIndexes = Array
-    .from(document.querySelectorAll(".word-checkbox:checked"))
-    .map(checkbox => Number(checkbox.value));
+    .from(
+      document.querySelectorAll(
+        ".word-checkbox:checked"
+      )
+    )
+    .map(checkbox =>
+      Number(checkbox.value)
+    );
 
   if(selectedIndexes.length === 0){
     $("settingsError").textContent =
       "最低1つは単語を選んでください。";
+
     return;
   }
 
   const settings = {
-    selectedIndexes,
+    selectedIndexes:selectedIndexes,
     autoSpeak:$("autoSpeakCheck").checked
   };
 
@@ -860,8 +1168,12 @@ $("saveSettingsBtn").onclick = () => {
       STORAGE_KEY,
       JSON.stringify(settings)
     );
+
   }catch(error){
-    console.warn("設定を保存できませんでした。", error);
+    console.warn(
+      "設定を保存できませんでした。",
+      error
+    );
   }
 
   words = selectedIndexes
@@ -877,10 +1189,11 @@ $("saveSettingsBtn").onclick = () => {
   if(autoSpeak){
     setTimeout(() => {
       speakCurrentWord();
-    }, 300);
+    }, 250);
   }
 };
 
+/* 音声一覧を読み込む */
 if("speechSynthesis" in window){
   speechSynthesis.getVoices();
 
@@ -889,6 +1202,7 @@ if("speechSynthesis" in window){
   };
 }
 
+/* 初期表示 */
 applySavedSettings();
 </script>
 
