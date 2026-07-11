@@ -873,7 +873,6 @@ function renderCard(){
   $("icon").textContent = current.icon;
   $("english").textContent = current.en;
   $("japanese").textContent = current.jp;
-  $("soundBtn").textContent = "🔊 " + current.en;
 
   $("counter").textContent =
     (currentIndex + 1) + " / " + words.length;
@@ -919,7 +918,7 @@ function getEnglishVoice(){
 }
 
 /* 現在の英単語を読み上げる */
-function speakCurrentWord(){
+function speakCurrentWord(rate = 0.78, activeButton = $("soundBtn")){
   if(!("speechSynthesis" in window)){
     alert(
       "このブラウザは音声読み上げに対応していません。"
@@ -935,11 +934,14 @@ function speakCurrentWord(){
 
   speechSynthesis.cancel();
 
+  $("soundBtn").classList.remove("speaking");
+  $("slowBtn").classList.remove("speaking");
+
   const utterance =
     new SpeechSynthesisUtterance(current.en);
 
   utterance.lang = "en-US";
-  utterance.rate = 0.78;
+  utterance.rate = rate;
   utterance.pitch = 1.15;
   utterance.volume = 1;
 
@@ -950,18 +952,28 @@ function speakCurrentWord(){
   }
 
   utterance.onstart = () => {
-    $("soundBtn").classList.add("speaking");
+    activeButton.classList.add("speaking");
   };
 
   utterance.onend = () => {
-    $("soundBtn").classList.remove("speaking");
+    activeButton.classList.remove("speaking");
   };
 
   utterance.onerror = () => {
-    $("soundBtn").classList.remove("speaking");
+    activeButton.classList.remove("speaking");
   };
 
   speechSynthesis.speak(utterance);
+}
+
+/* ふつうの速さ */
+function speakNormal(){
+  speakCurrentWord(0.78, $("soundBtn"));
+}
+
+/* ゆっくり */
+function speakSlow(){
+  speakCurrentWord(0.40, $("slowBtn"));
 }
 
 /* 自動再生 */
